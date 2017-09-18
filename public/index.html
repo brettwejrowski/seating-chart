@@ -1,0 +1,89 @@
+<!doctype HTML>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Seating Chart</title>
+    <style>
+      .run-button {
+        position: fixed;
+        padding: 5px 8px;
+        display: block;
+        color: #fff;
+        background: #999;
+        top: 5px;
+        right: 8px;
+      }
+
+      .chart {
+        position:relative;
+        display: block;
+        padding: 40px;
+        float: left;
+        border: 1px solid whitesmoke;
+      }
+      .chart.selected {
+        border-color: blue;
+      }
+
+      .chart .settings {
+        padding: 50px;
+        font-weight: bold;
+        font-size: 15px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255, 0.8);
+        color: black;
+        opacity: 0;
+        transition: opacity 100ms;
+      }
+
+      .chart:hover .settings {
+        opacity: 1;
+        transition: opacity 100ms 2500ms;
+      }
+
+      .chart .settings .favorite {
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        content: '/2605';
+        width: 20px;
+        height: 20px;
+      }
+
+      .row {
+        display: block;
+        float: left;
+        clear: both;
+      }
+
+      .spot {
+        display: block;
+        width: 60px;
+        height: 60px;
+        float: left;
+      }
+
+      .spot.table {
+        background-color: brown;
+      }
+
+      .spot.seat {
+        background-color: yellow;
+      }
+
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+
+</html>
