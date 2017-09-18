@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title>Seating Chart</title>
     <style>
+      * { box-sizing: border-box; }
+
       .run-button {
         position: fixed;
         padding: 5px 8px;
@@ -53,9 +55,16 @@
         position: absolute;
         top: 20px;
         right: 20px;
-        content: '/2605';
         width: 20px;
         height: 20px;
+      }
+
+      .chart .settings .favorite:after {
+        content: '\2606';
+      }
+
+      .chart .settings .favorite.active:after {
+        content: '\2605';
       }
 
       .row {
