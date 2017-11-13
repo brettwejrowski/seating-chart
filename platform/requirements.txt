@@ -1,0 +1,13 @@
+certifi==2017.11.5
+chardet==3.0.4
+click==6.7
+Flask==0.12.2
+idna==2.6
+itsdangerous==0.24
+Jinja2==2.10
+MarkupSafe==1.0
+-e git+git@github.com:brettwejrowski/seating-chart.git@bd93895bdfb05754b889c3becc27e9015d72a07d#egg=Plinko&subdirectory=platform
+requests==2.18.4
+SQLAlchemy==1.1.15
+urllib3==1.22
+Werkzeug==0.12.2
