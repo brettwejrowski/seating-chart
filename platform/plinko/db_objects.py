@@ -22,6 +22,7 @@ class SeatingEvent(DBObject):
         return {
             'id': self.id,
             'name': self.name,
+            'groups': [group.to_model() for group in self.groups],
         }
 
 
@@ -31,11 +32,18 @@ class GuestGroup(DBObject):
     event_id = Column(Integer, ForeignKey('seating_event.id'))
     event = relationship("SeatingEvent", backref="groups")
 
+    def to_model(self):
+        return {
+            'id': self.id,
+            'guests': [guest.to_model() for guest in self.guests],
+        }
+
 
 guest_tag_table = Table('guest_tag', DBObject.metadata,
     Column('guest_id', Integer, ForeignKey('guest.id')),
     Column('tag_id', Integer, ForeignKey('tag.id'))
 )
+
 
 class Guest(DBObject):
     __tablename__ = 'guest'
@@ -45,8 +53,17 @@ class Guest(DBObject):
     group_id = Column(Integer, ForeignKey('guest_group.id'))
     group = relationship("GuestGroup", backref="guests")
 
+    def to_model(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'tags': [tag.name for tag in self.tags],
+        }
+
 
 class Tag(DBObject):
     __tablename__ = 'tag'
 
-    name = Column(String)
+    token = Column(String)
+    text = Column(String)
+

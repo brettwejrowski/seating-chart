@@ -1,8 +1,8 @@
 """in the beginning 
 
-Revision ID: b77c018fa26b
+Revision ID: 02b0075220f4
 Revises: 
-Create Date: 2017-11-13 19:55:47.869948
+Create Date: 2017-11-14 16:00:32.928031
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b77c018fa26b'
+revision = '02b0075220f4'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,7 +28,8 @@ def upgrade():
     op.create_table('tag',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created', sa.DateTime(), nullable=False),
-    sa.Column('name', sa.String(), nullable=False),
+    sa.Column('token', sa.String(), nullable=False),
+    sa.Column('text', sa.String(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('guest_group',

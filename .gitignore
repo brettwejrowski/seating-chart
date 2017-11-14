@@ -1,2 +1,4 @@
-public/bundle.js
+web-ui/build
 node_modules
+*.egg-info
+*.pyc
