@@ -20,11 +20,11 @@ function http_call (config) {
   return $.ajax(_config);
 }
 
-export function get (url, config) {
+export function http_get (url, config) {
   return http_call($.extend((config || {}), { url: url }));
 }
 
-export function post (url, data, config) {
+export function http_post (url, data, config) {
   return http_call($.extend((config || {}), {
     type: 'POST',
     url: url,
@@ -32,7 +32,14 @@ export function post (url, data, config) {
   }));
 }
 
-export function postForm (url, data, config) {
+export function http_delete (url, config) {
+  return http_call($.extend((config || {}), {
+    type: 'DELETE',
+    url: url,
+  }));
+}
+
+export function http_post_form (url, config) {
   return http_call($.extend((config || {}), {
     type: 'POST',
     url: url,
@@ -44,4 +51,8 @@ export function postForm (url, data, config) {
   }));
 }
 
-export default { get, post }
+export default {
+  'get': http_get,
+  'post': http_post,
+  'delete': http_delete,
+};

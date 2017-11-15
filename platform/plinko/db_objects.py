@@ -57,7 +57,7 @@ class Guest(DBObject):
         return {
             'id': self.id,
             'name': self.name,
-            'tags': [tag.name for tag in self.tags],
+            'tags': [tag.to_model() for tag in self.tags],
         }
 
 
@@ -66,4 +66,10 @@ class Tag(DBObject):
 
     token = Column(String)
     text = Column(String)
+
+    def to_model(self):
+        return {
+            'id': self.id,
+            'text': self.text,
+        }
 

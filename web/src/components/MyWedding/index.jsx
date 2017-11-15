@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import { get_wedding } from 'lib/api';
 
-import GuestList from 'components/GuestList';
+import GuestList from 'components/GuestList/index.jsx';
 
 import localStyles from './styles.scss';
 

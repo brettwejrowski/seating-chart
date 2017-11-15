@@ -81,8 +81,9 @@ class db_context(object):
         if e_type is None:
             try:
                 db_session.commit()
-            except:
+            except e:
                 db_session.rollback()
+                raise e
 
 
 Column = partial(Column, nullable=False)
@@ -94,9 +95,6 @@ class DefaultMixin(object):
         _dict = {}
         print self.__dict__
         for k, v in self.__dict__.iteritems():
-            print 'to dict'
-            print k
-            print v
             if not k.startswith("_sa"):
                 try:
                     _dict[k] = v.to_dict()
@@ -107,7 +105,7 @@ class DefaultMixin(object):
 
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False) # pylint: disable=invalid-name
-    created = Column(DateTime, nullable=False)  # No default, so that you're deliberate about when data was created
+    created = Column(DateTime, nullable=False)
 
 
 DBObject = declarative_base(cls=DefaultMixin)

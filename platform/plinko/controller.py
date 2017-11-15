@@ -26,16 +26,22 @@ def create_event(owner_id, name):
 
 def create_group(event):
     group = GuestGroup()
+    group.created = datetime.utcnow()
     group.event = event
     db_session.add(group)
     return group
 
 
-def create_guest(group, name, tags):
+def get_group(group_id):
+    return db_session.query(GuestGroup) \
+        .filter(GuestGroup.id == group_id) \
+        .first()
+
+def create_guest(group, name):
     guest = Guest()
     guest.group = group
     guest.name = name
-    guest.tags = tags
+    guest.created = datetime.utcnow()
     db_session.add(guest)
     return guest
 
@@ -51,10 +57,16 @@ def get_tag_by_token(token):
         .filter(Tag.token == token) \
         .first()
 
+def get_tag(id):
+    return db_session.query(Tag) \
+        .filter(Tag.id == id) \
+        .first()
+
 
 def create_tag(text, token):
     tag = Tag()
     tag.text = text
     tag.token = token
+    tag.created = datetime.utcnow()
     db_session.add(tag)
     return tag
