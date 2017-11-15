@@ -63,10 +63,19 @@ def get_tag(id):
         .first()
 
 
-def create_tag(text, token):
+def create_tag(event, text, token):
     tag = Tag()
     tag.text = text
     tag.token = token
+    tag.event_id = event.id
     tag.created = datetime.utcnow()
     db_session.add(tag)
     return tag
+
+
+def get_tags_for_event(event):
+    return db_session.query(Tag) \
+        .filter(Tag.event_id == event.id) \
+        .all()
+
+

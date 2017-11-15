@@ -5,7 +5,17 @@ Plinko.egg-info/dependency_links.txt
 Plinko.egg-info/top_level.txt
 plinko/__init__.py
 plinko/app.py
+plinko/client.py
+plinko/config.py
+plinko/controller.py
+plinko/db_objects.py
+plinko/exceptions.py
+plinko/sql.py
 plinko.egg-info/PKG-INFO
 plinko.egg-info/SOURCES.txt
 plinko.egg-info/dependency_links.txt
 plinko.egg-info/top_level.txt
+plinko/genome/__init__.py
+plinko/genome/client.py
+plinko/genome/exceptions.py
+plinko/genome/models.py

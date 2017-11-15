@@ -1,0 +1,2 @@
+class MismatchedMarkerType(Exception):
+    pass

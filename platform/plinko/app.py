@@ -93,7 +93,6 @@ def add_tag(guest_id):
 @app.route('/api/v0/guest/<guest_id>/remove_tag/<tag_id>', methods=['POST'])
 def remove_tag(guest_id, tag_id):
     user_id = _get_user_id()
-
     guest = client.remove_tag_from_guest(guest_id, tag_id)
     return jsonify(guest.to_model())
 

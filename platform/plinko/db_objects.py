@@ -66,6 +66,7 @@ class Tag(DBObject):
 
     token = Column(String)
     text = Column(String)
+    event_id = Column(String)
 
     def to_model(self):
         return {

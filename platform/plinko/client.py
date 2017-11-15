@@ -74,7 +74,7 @@ def add_tag_for_guest(guest_id, text):
         token = _tokenize_tag(text)
         tag = controller.get_tag_by_token(token)
         if tag is None:
-            tag = controller.create_tag(text, token)
+            tag = controller.create_tag(guest.group.event, text, token)
 
         guest.tags.append(tag)
         return guest
@@ -92,3 +92,10 @@ def remove_tag_from_guest(guest_id, tag_id):
 
         guest.tags.remove(tag)
         return guest
+
+
+def get_tags_for_wedding(user_id):
+    with db_context():
+        wedding = get_or_create_wedding_for_user(user_id)
+        return controller.get_tags_for_event(wedding)
+
