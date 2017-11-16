@@ -22,12 +22,14 @@ class NumberMarker(Marker):
     maximum = 1
 
     def __init__(self):
-        self.value = random.random() * self.maximum - self.minimum
+        _range = self.maximum - self.minimum
+        self.value = self.minimum + (random.random() * _range)
 
 
 class IntegerMarker(Marker):
     def __init__(self):
-        self.value = int(round(random.random() * self.maximum - self.minimum))
+        _range = self.maximum - self.minimum
+        self.value = int(round(self.minimum + (random.random() * _range)))
 
 
 class ChoiceMarker(Marker):
@@ -50,7 +52,7 @@ class Genome(object):
 
         genome = self.__class__({})
 
-        for k, v in self.iteritems():
+        for k, v in self.markers.iteritems():
             genome.markers[k] = self.markers[k].mate_with(other.markers[k])
 
     def to_dict(self):
@@ -59,5 +61,4 @@ class Genome(object):
             _output[k] = v.value
 
         return _output
-
 

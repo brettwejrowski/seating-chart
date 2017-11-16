@@ -18,7 +18,3 @@ def generate_random_genome(tags=[]):
 
     return Genome(markers)
 
-
-
-
-

@@ -8,6 +8,7 @@ import requests
 
 from plinko import client
 from plinko.config import ASSET_URL
+from plinko.genome.client import generate_random_genome
 
 app = Flask(__name__)
 
@@ -95,6 +96,14 @@ def remove_tag(guest_id, tag_id):
     user_id = _get_user_id()
     guest = client.remove_tag_from_guest(guest_id, tag_id)
     return jsonify(guest.to_model())
+
+
+@app.route('/api/v0/create_lineage', methods=['GET'])
+def create_lineage():
+    user_id = _get_user_id()
+    tags = client.get_tags_for_wedding(user_id)
+    genome = generate_random_genome(tags)
+    return jsonify(genome.to_dict())
 
 
 

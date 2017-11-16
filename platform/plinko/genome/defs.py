@@ -32,6 +32,7 @@ class GuestSortMarker(ChoiceMarker):
     ]
 
 strategy_template = {
+    'same_group_factor': NumberMarker,
     'table_cost': NumberMarker,
     'space_cost': NumberMarker,
     'seat_cost': NumberMarker,
