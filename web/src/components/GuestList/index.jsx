@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import * as api from 'lib/api';
+import { get_guest_count } from 'lib/helpers';
 
 export default class GuestList extends Component {
   constructor (props) {
@@ -28,9 +29,11 @@ export default class GuestList extends Component {
 
   render () {
     const { groups } = this.state;
+    const guest_count = get_guest_count(groups);
 
     return (
       <div>
+        <h2>{guest_count} Guest{guest_count !== 1 && 's'}</h2>
         <ul>
           {groups.map((group) =>
             <li key={group.id}>

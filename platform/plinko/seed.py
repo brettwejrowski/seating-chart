@@ -769,6 +769,18 @@ def seed():
             print guest['name']
         client.create_group(user_id, group)
 
+    for x in range(3):
+        for y in range(3):
+            client.create_table(
+                user_id,
+                x=(x * 6),
+                y=(y * 6),
+                width=3,
+                height=3,
+                table_type='rect',
+                number_of_seats=12,
+            )
+
 
 if __name__ == "__main__":
     seed()

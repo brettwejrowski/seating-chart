@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import * as api from 'lib/api';
+import { get_seat_count } from 'lib/helpers';
 
 export default class SeatingLayout extends Component {
   constructor (props) {
@@ -44,9 +45,11 @@ export default class SeatingLayout extends Component {
 
   render () {
     const { tables } = this.state;
+    const seat_count = get_seat_count(tables);
 
     return (
       <div>
+        <h2>{seat_count} Seat{seat_count !== 1 && 's'}</h2>
         <ul>
           {tables.map((table) =>
             <li key={table.id}>

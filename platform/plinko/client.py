@@ -29,10 +29,9 @@ def create_group(user_id, guests):
             raise EventNotFound
         group = controller.create_group(event)
         for guest in guests:
-            tags = [controller.create_tag(
+            tags = [_get_or_create_tag(
                 event,
-                tag_text,
-                _tokenize_tag(tag_text),
+                tag_text
             ) for tag_text in guest['tags']]
 
             controller.create_guest(group, guest['name'], tags)
@@ -67,16 +66,20 @@ def remove_guest(guest_id):
         db_txn.delete(guest)
 
 
+def _get_or_create_tag(event, tag_text):
+    token = _tokenize_tag(tag_text)
+    tag = controller.get_tag_by_token(token)
+    if tag is None:
+        tag = controller.create_tag(event, tag_text, token)
+    return tag
+
+
 def add_tag_for_guest(guest_id, text):
     with db_context():
         guest = controller.get_guest(guest_id)
         if guest is None:
             raise GuestNotFound
-        token = _tokenize_tag(text)
-        tag = controller.get_tag_by_token(token)
-        if tag is None:
-            tag = controller.create_tag(guest.group.event, text, token)
-
+        tag = _get_or_create_tag(guest.group.event, text)
         guest.tags.append(tag)
         return guest
 
