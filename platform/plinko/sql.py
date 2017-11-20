@@ -83,6 +83,7 @@ class db_context(object):
                 db_session.commit()
             except Exception:
                 db_session.rollback()
+                raise
 
 
 Column = partial(Column, nullable=False)

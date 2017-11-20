@@ -30,11 +30,12 @@ def create_group(user_id, guests):
         group = controller.create_group(event)
         for guest in guests:
             tags = [controller.create_tag(
+                event,
                 tag_text,
-                _tokenize_tag(tag),
-            ) for tag_text in guest.tags]
+                _tokenize_tag(tag_text),
+            ) for tag_text in guest['tags']]
 
-            controller.create_guest(group, guest.name, tags)
+            controller.create_guest(group, guest['name'], tags)
     return group
 
 def delete_group(group_id):
@@ -50,12 +51,12 @@ def delete_group(group_id):
 
 
 
-def create_guest_for_group(group_id, name):
+def create_guest_for_group(group_id, name, tags=[]):
     with db_context():
         group = controller.get_group(group_id)
         if group is None:
             raise GroupNotFound
-        return controller.create_guest(group, name)
+        return controller.create_guest(group, name, tags)
 
 
 def remove_guest(guest_id):

@@ -11,7 +11,7 @@ export default class SeatingLayout extends Component {
 
   createTable () {
     const { x, y, width, height } = this.state;
-    const number_of_seats = width + height * 2;
+    const number_of_seats = width * 2 + height * 2;
     const table_type = 'rect';
 
     api.create_table({
@@ -50,9 +50,8 @@ export default class SeatingLayout extends Component {
         <ul>
           {tables.map((table) =>
             <li key={table.id}>
-              <Table
-                id={table.id}
-                guests={table.guests}
+              <SeatingTable
+                table={table}
                 onDelete={() => this.deleteTable(table.id)}
               />
             </li>

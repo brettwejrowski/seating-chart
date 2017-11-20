@@ -38,10 +38,11 @@ def get_group(group_id):
         .filter(GuestGroup.id == group_id) \
         .first()
 
-def create_guest(group, name):
+def create_guest(group, name, tags=[]):
     guest = Guest()
     guest.group = group
     guest.name = name
+    guest.tags = tags
     guest.created = datetime.utcnow()
     db_session.add(guest)
     return guest
@@ -89,7 +90,6 @@ def create_table(
         table_type,
         number_of_seats,
 ):
-
     table = Table()
     table.x = x
     table.y = y
@@ -97,8 +97,14 @@ def create_table(
     table.height = height
     table.table_type = table_type
     table.number_of_seats = number_of_seats
+    table.event = event
+    table.created = datetime.utcnow()
     db_session.add(table)
     return table
 
 
+def get_table(table_id):
+    return db_session.query(Table) \
+        .filter(Table.id == table_id) \
+        .first()
 
