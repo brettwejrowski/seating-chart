@@ -9,3 +9,6 @@ class GuestNotFound(Exception):
 
 class TagNotFound(Exception):
     pass
+
+class TableNotFound(Exception):
+    pass

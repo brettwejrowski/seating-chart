@@ -23,6 +23,7 @@ class SeatingEvent(DBObject):
             'id': self.id,
             'name': self.name,
             'groups': [group.to_model() for group in self.groups],
+            'tables': [table.to_model() for table in self.layout],
         }
 
 
@@ -72,5 +73,32 @@ class Tag(DBObject):
         return {
             'id': self.id,
             'text': self.text,
+            'token': self.token,
         }
+
+
+# seating layout
+class Table(DBObject):
+    __tablename__ = 'seating_table'
+
+    width = Column(Integer)
+    height = Column(Integer)
+    x = Column(Integer)
+    y = Column(Integer)
+    number_of_seats = Column(Integer)
+    table_type = Column(String)
+    event_id = Column(Integer, ForeignKey('seating_event.id'))
+    event = relationship("SeatingEvent", backref="layout")
+
+    def to_model(self):
+        return {
+            'id': self.id,
+            'x': self.x,
+            'y': self.y,
+            'width': self.width,
+            'height': self.height,
+            'number_of_seats': self.number_of_seats,
+            'table_type': self.table_type,
+        }
+
 

@@ -106,6 +106,31 @@ def create_lineage():
     return jsonify(genome.to_dict())
 
 
+@app.route('/api/v0/layout/create_table', methods=['POST'])
+def new_table():
+    user_id = _get_user_id()
+    data = json.loads(request.data)
+
+    table = client.create_table(
+        user_id,
+        x=data['x'],
+        y=data['y'],
+        width=data['width'],
+        height=data['height'],
+        table_type=data['table_type'],
+        number_of_seats=data['number_of_seats'],
+    )
+    return jsonify(table.to_model())
+
+
+@app.route('/api/v0/table/<table_id>', methods=['DELETE'])
+def delete_table(table_id):
+    user_id = _get_user_id()
+
+    table = client.delete_table(table_id)
+    return "", 200
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

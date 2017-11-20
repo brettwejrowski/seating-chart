@@ -81,9 +81,8 @@ class db_context(object):
         if e_type is None:
             try:
                 db_session.commit()
-            except e:
+            except Exception:
                 db_session.rollback()
-                raise e
 
 
 Column = partial(Column, nullable=False)

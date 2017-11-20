@@ -59,11 +59,11 @@ def create_guest_for_group(group_id, name):
 
 
 def remove_guest(guest_id):
-    with db_context() as db_session:
+    with db_context() as db_txn:
         guest = controller.get_guest(guest_id)
         if guest is None:
             raise GuestNotFound
-        db_session.delete(guest)
+        db_txn.delete(guest)
 
 
 def add_tag_for_guest(guest_id, text):
@@ -98,4 +98,39 @@ def get_tags_for_wedding(user_id):
     with db_context():
         wedding = get_or_create_wedding_for_user(user_id)
         return controller.get_tags_for_event(wedding)
+
+
+def create_table(
+        user_id,
+        x,
+        y,
+        width,
+        height,
+        table_type,
+        number_of_seats,
+):
+    with db_context():
+        event = get_or_create_wedding_for_user(user_id)
+        table = controller.create_table(
+            event,
+            x,
+            y,
+            width,
+            height,
+            table_type,
+            number_of_seats,
+        )
+        return table
+
+
+def delete_table(table_id):
+    with db_context() as db_txn:
+        table = controller.get_table(table_id)
+        if table is None:
+            raise TableNotFound
+
+        db_txn.delete(table)
+
+
+
 

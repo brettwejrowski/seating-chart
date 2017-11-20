@@ -40,7 +40,7 @@ class ChoiceMarker(Marker):
 
 
 class Genome(object):
-    def __init__(self, markers):
+    def __init__(self, markers, parent_id=None):
         self.markers = {}
         for marker_name, marker_class in markers.iteritems():
             self.markers[marker_name] = marker_class()
@@ -61,4 +61,14 @@ class Genome(object):
             _output[k] = v.value
 
         return _output
+
+    @classmethod
+    def from_dict(cls, sequence, parent_id=None):
+        genome = cls({}, parent_id)
+
+        for k, v in sequence:
+            genome.markers[k] = v
+
+        return genome
+
 

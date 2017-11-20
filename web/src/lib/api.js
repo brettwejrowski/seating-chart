@@ -28,3 +28,10 @@ export function remove_tag (guest_id, tag_id, success) {
   return http.post(`/api/v0/guest/${guest_id}/remove_tag/${tag_id}`, { success });
 }
 
+export function create_table (data, success) {
+  return http.post(`/api/v0/layout/create_table`, data, { success });
+}
+
+export function delete_table (table_id, success) {
+  return http.delete(`/api/v0/table/${table_id}`, { success });
+}

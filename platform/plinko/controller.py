@@ -4,6 +4,7 @@ from plinko.db_objects import (
     Guest,
     GuestGroup,
     SeatingEvent,
+    Table,
     Tag,
 )
 from plinko.sql import db_session
@@ -77,5 +78,27 @@ def get_tags_for_event(event):
     return db_session.query(Tag) \
         .filter(Tag.event_id == event.id) \
         .all()
+
+
+def create_table(
+        event,
+        x,
+        y,
+        width,
+        height,
+        table_type,
+        number_of_seats,
+):
+
+    table = Table()
+    table.x = x
+    table.y = y
+    table.width = width
+    table.height = height
+    table.table_type = table_type
+    table.number_of_seats = number_of_seats
+    db_session.add(table)
+    return table
+
 
 
