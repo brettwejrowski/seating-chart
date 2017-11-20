@@ -18,12 +18,12 @@ class SeatingEvent(DBObject):
     name = Column(String)
     owner_id = Column(String)
 
-    def to_model(self):
+    def to_dict(self):
         return {
             'id': self.id,
             'name': self.name,
-            'groups': [group.to_model() for group in self.groups],
-            'tables': [table.to_model() for table in self.layout],
+            'groups': [group.to_dict() for group in self.groups],
+            'tables': [table.to_dict() for table in self.layout],
         }
 
 
@@ -33,10 +33,10 @@ class GuestGroup(DBObject):
     event_id = Column(Integer, ForeignKey('seating_event.id'))
     event = relationship("SeatingEvent", backref="groups")
 
-    def to_model(self):
+    def to_dict(self):
         return {
             'id': self.id,
-            'guests': [guest.to_model() for guest in self.guests],
+            'guests': [guest.to_dict() for guest in self.guests],
         }
 
 
@@ -54,11 +54,11 @@ class Guest(DBObject):
     group_id = Column(Integer, ForeignKey('guest_group.id'))
     group = relationship("GuestGroup", backref="guests")
 
-    def to_model(self):
+    def to_dict(self):
         return {
             'id': self.id,
             'name': self.name,
-            'tags': [tag.to_model() for tag in self.tags],
+            'tags': [tag.to_dict() for tag in self.tags],
         }
 
 
@@ -69,7 +69,7 @@ class Tag(DBObject):
     text = Column(String)
     event_id = Column(String)
 
-    def to_model(self):
+    def to_dict(self):
         return {
             'id': self.id,
             'text': self.text,
@@ -90,7 +90,7 @@ class Table(DBObject):
     event_id = Column(Integer, ForeignKey('seating_event.id'))
     event = relationship("SeatingEvent", backref="layout")
 
-    def to_model(self):
+    def to_dict(self):
         return {
             'id': self.id,
             'x': self.x,

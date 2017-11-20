@@ -38,7 +38,7 @@ def web_asset(path):
 def get_wedding():
     user_id = _get_user_id()
     wedding = client.get_or_create_wedding_for_user(user_id)
-    return jsonify(wedding.to_model())
+    return jsonify(wedding.to_dict())
 
 
 # Guests
@@ -54,7 +54,7 @@ def new_group():
     data = json.loads(request.data)
 
     group = client.create_group(user_id, data.get('guests', []))
-    return jsonify(group.to_model())
+    return jsonify(group.to_dict())
 
 
 @app.route('/api/v0/group/<group_id>', methods=['DELETE'])
@@ -71,7 +71,7 @@ def create_guest(group_id):
     data = json.loads(request.data)
 
     guest = client.create_guest_for_group(group_id, data['name'])
-    return jsonify(guest.to_model())
+    return jsonify(guest.to_dict())
 
 
 @app.route('/api/v0/guest/<guest_id>', methods=['DELETE'])
@@ -88,22 +88,14 @@ def add_tag(guest_id):
     data = json.loads(request.data)
 
     guest = client.add_tag_for_guest(guest_id, data['text'])
-    return jsonify(guest.to_model())
+    return jsonify(guest.to_dict())
 
 
 @app.route('/api/v0/guest/<guest_id>/remove_tag/<tag_id>', methods=['POST'])
 def remove_tag(guest_id, tag_id):
     user_id = _get_user_id()
     guest = client.remove_tag_from_guest(guest_id, tag_id)
-    return jsonify(guest.to_model())
-
-
-@app.route('/api/v0/create_lineage', methods=['GET'])
-def create_lineage():
-    user_id = _get_user_id()
-    tags = client.get_tags_for_wedding(user_id)
-    genome = generate_random_genome(tags)
-    return jsonify(genome.to_dict())
+    return jsonify(guest.to_dict())
 
 
 @app.route('/api/v0/layout/create_table', methods=['POST'])
@@ -120,7 +112,7 @@ def new_table():
         table_type=data['table_type'],
         number_of_seats=data['number_of_seats'],
     )
-    return jsonify(table.to_model())
+    return jsonify(table.to_dict())
 
 
 @app.route('/api/v0/table/<table_id>', methods=['DELETE'])
@@ -130,6 +122,13 @@ def delete_table(table_id):
     table = client.delete_table(table_id)
     return "", 200
 
+
+@app.route('/api/v0/create_lineage', methods=['GET'])
+def create_lineage():
+    user_id = _get_user_id()
+    tags = client.get_tags_for_wedding(user_id)
+    generation = create_seed_generation(tags)
+    return jsonify([child.to_dict() for child in generation])
 
 
 if __name__ == "__main__":
