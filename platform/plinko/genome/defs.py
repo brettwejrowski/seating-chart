@@ -10,7 +10,7 @@ class TagMarker(NumberMarker):
 
 class OffsetMarker(IntegerMarker):
     minimum = 0
-    maximum = 100
+    maximum = 10000
 
 class SortDirectionMarker(ChoiceMarker):
     options = ['asc', 'desc']
@@ -33,10 +33,6 @@ class GuestSortMarker(ChoiceMarker):
 
 strategy_template = {
     'same_group_factor': NumberMarker,
-    'table_cost': NumberMarker,
-    'space_cost': NumberMarker,
-    'seat_cost': NumberMarker,
-    'taken_seat_cost': NumberMarker,
     'distance_decay': NumberMarker,
     'same_table_factor': NumberMarker,
     'initial_group': OffsetMarker,
@@ -44,6 +40,8 @@ strategy_template = {
     'group_sort': GroupSortMarker,
     'group_sort_direction': SortDirectionMarker,
     'initial_guest': OffsetMarker,
+    'guest_sort': GroupSortMarker,
     'guest_offset': OffsetMarker,
     'guest_sort_direction': SortDirectionMarker,
+    'initial_table': OffsetMarker,
 }

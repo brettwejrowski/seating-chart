@@ -8,7 +8,8 @@ import requests
 
 from plinko import client
 from plinko.config import ASSET_URL
-from plinko.genome.client import generate_random_genome
+from plinko.genome.client import create_seed_generation
+from plinko.seating_chart.client import create_seating_chart
 
 app = Flask(__name__)
 
@@ -128,6 +129,20 @@ def create_lineage():
     user_id = _get_user_id()
     tags = client.get_tags_for_wedding(user_id)
     generation = create_seed_generation(tags)
+    wedding = client.get_or_create_wedding_for_user(user_id)
+
+    chart = create_seating_chart(
+        wedding.groups,
+        wedding.layout,
+        generation[0].to_dict(),
+        tags,
+    )
+
+    for k, v in chart.iteritems():
+        print '----------------'
+        for guest in v:
+            print guest.name
+
     return jsonify([child.to_dict() for child in generation])
 
 
