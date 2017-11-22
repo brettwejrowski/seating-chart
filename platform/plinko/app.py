@@ -131,19 +131,22 @@ def create_lineage():
     generation = create_seed_generation(tags)
     wedding = client.get_or_create_wedding_for_user(user_id)
 
-    chart = create_seating_chart(
-        wedding.groups,
-        wedding.layout,
-        generation[0].to_dict(),
-        tags,
-    )
+    output = []
+    for child in generation:
+        _genome = child.to_dict()
+        _seating_chart = create_seating_chart(
+            wedding.groups,
+            wedding.layout,
+            _genome,
+            tags,
+        )
 
-    for k, v in chart.iteritems():
-        print '----------------'
-        for guest in v:
-            print guest.name
+        output.append({
+            'genome': _genome,
+            'seating_chart': _seating_chart,
+        })
 
-    return jsonify([child.to_dict() for child in generation])
+    return jsonify(output)
 
 
 if __name__ == "__main__":

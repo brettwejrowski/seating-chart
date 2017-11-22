@@ -1,0 +1,24 @@
+:local(.container) {
+  display: block;
+  width: 100%;
+  margin: 20px;
+  min-height: 1000px;
+  position: relative;
+}
+
+:local(.table-container),
+:local(.table),
+:local(.seat) {
+  position: absolute;
+}
+
+:local(.table) {
+  background: #ddd;
+  border: 1px solid #aaa;
+}
+
+:local(.buttons) {
+  padding: 20px;
+  clear: both;
+}
+

@@ -141,10 +141,12 @@ def create_seating_chart(guest_list, layout, genome, tags):
             else:
                 raise 'shite'
 
-
             any_seated = True
 
-    return seated
+    return [{
+        'seats': [g.to_dict() for g in seated[table.id]],
+        'table': table.to_dict(),
+    } for table in layout]
 
 
 

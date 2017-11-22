@@ -23,7 +23,7 @@ def generate_random_genome(tags=[]):
 
 def create_seed_generation(tags=[]):
     generation = []
-    while len(generation) <= SIBLINGS_PER_GENERATION:
+    while len(generation) < SIBLINGS_PER_GENERATION:
         generation.append(generate_random_genome(tags))
 
     return generation

@@ -6,6 +6,7 @@ import { get_wedding } from 'lib/api';
 
 import GuestList from 'components/GuestList/index.jsx';
 import SeatingLayout from 'components/SeatingLayout/index.jsx';
+import SeatingLineage from 'components/SeatingLineage/index.jsx';
 
 import localStyles from './styles.scss';
 
@@ -27,9 +28,7 @@ export default class MyWedding extends Component {
       <div>
         <h1>{ wedding.name }</h1>
 
-        <GuestList groups={wedding.groups} />
-
-        <SeatingLayout tables={wedding.tables} />
+        <SeatingLineage />
       </div>
     );
   }

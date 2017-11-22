@@ -35,3 +35,7 @@ export function create_table (data, success) {
 export function delete_table (table_id, success) {
   return http.delete(`/api/v0/table/${table_id}`, { success });
 }
+
+export function create_lineage (success) {
+  return http.get(`/api/v0/create_lineage`, { success });
+}
