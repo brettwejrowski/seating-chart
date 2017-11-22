@@ -14,28 +14,27 @@ export default class SeatingLineage extends Component {
     api.create_lineage((data) => {
       this.setState({
         children: data,
-        feedback: [],
+        favorite: null,
+        questions_asked: 0,
       });
     });
   }
 
-  vote (child, val) {
-    let { feedback } = this.state;
-    feedback.push([this.state.children.indexOf(child), val])
-    this.setState({ feedback });
+  vote (child, milliseconds) {
+    console.log(milliseconds);
+    this.setState({
+      questions_asked: this.state.questions_asked + 1,
+    });
   }
 
   render () {
     if (!this.state) return <div>Loading...</div>;
 
-    const { children, feedback } = this.state;
+    const { children } = this.state;
 
     let child = get_random_item(children);
     let table = get_random_item(child.seating_chart);
-
-    console.log(feedback)
-    console.log(get_high_scored_index(feedback))
-
+    let ms_asked = Date.now();
 
     return (
       <div>
@@ -47,11 +46,15 @@ export default class SeatingLineage extends Component {
         />
 
         <div className={localStyles.buttons}>
-          <a onClick={() => this.vote(child, -1)}>
+          <a onClick={() => this.vote(child, Date.now() - ms_asked)}>
             Nope
           </a>&nbsp;
 
-          <a onClick={() => this.vote(child, 1)}>
+          <a
+            onClick={() => this.setState({
+              favorite: child,
+            )}
+          >
             Yep
           </a>
         </div>
