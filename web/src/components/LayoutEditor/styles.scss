@@ -17,8 +17,10 @@ $pink: #E83189;
 :local(.wrapper) {
   &.dragstart {
     opacity: 0.4;
+    z-index: 1;
 
-    :local(.table) {
+    :local(.table),
+    :local(.chair) {
       border: 1px dashed $pink;
     }
   }
@@ -39,6 +41,17 @@ $pink: #E83189;
   }
 }
 
+:local(.chair) {
+  position: absolute;
+  border: 1px solid $blue;
+  z-index: 2;
+  background: white;
+
+  .dragging & {
+    border-color: $pink;
+  }
+}
+
 :local(.resize) {
   position: absolute;
   cursor: nwse-resize;
@@ -48,12 +61,30 @@ $pink: #E83189;
 :local(.grid) {
   position: absolute;
   z-index: 1;
+  overflow: hidden;
+  border-radius: 100%;
+
+  :local(.overlay) {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 100%;
+    box-shadow: inset 20px 20px 70px white,
+                inset -20px 20px 70px white,
+                inset -20px -20px 70px white,
+                inset 20px -20px 70px white;
+    z-index: 2;
+  }
 }
 
 :local(.line) {
   position: absolute;
   background: $blue;
   opacity: 0.15;
+  z-index: 1;
 }
 
 :local(.next) {

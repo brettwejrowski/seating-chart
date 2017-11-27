@@ -87,27 +87,31 @@ export default class LayoutEditor extends Component {
   }
 
   renderGridLines (x, y, width, height) {
-    const left = (Math.round(x / BLOCK_SIZE) - 2) * BLOCK_SIZE;
-    const top = (Math.round(y / BLOCK_SIZE) - 2) * BLOCK_SIZE;
+    const PADDING = 4;
+
+    const left = (Math.round(x / BLOCK_SIZE) - PADDING) * BLOCK_SIZE;
+    const top = (Math.round(y / BLOCK_SIZE) - PADDING) * BLOCK_SIZE;
 
     let grid_lines = [];
-    for (let i = 1; i < width + 4; i++) {
+    for (let i = 1; i < width + 2 * PADDING; i++) {
       grid_lines.push({
-        height: height + 4,
+        height: height + 2 * PADDING,
         width: 0,
         x: i,
         y: 0,
       });
     }
 
-    for (let j = 1; j < height + 4; j++) {
+    for (let j = 1; j < height + 2 * PADDING; j++) {
       grid_lines.push({
         height: 0,
-        width: width + 4,
+        width: width + 2 * PADDING,
         x: 0,
         y: j
       });
     }
+
+
 
     return (
       <div
@@ -115,16 +119,16 @@ export default class LayoutEditor extends Component {
         style={{
           'left': `${left}px`,
           'top': `${top}px`,
-          'width': `${(width + 4) * BLOCK_SIZE}px`,
-          'height': `${(height + 4) * BLOCK_SIZE}px`
+          'width': `${(width + PADDING * 2) * BLOCK_SIZE}px`,
+          'height': `${(height + PADDING * 2) * BLOCK_SIZE}px`
         }}
       >
 
         <div
           className={localStyles.next}
           style={{
-            'left': `${2 * BLOCK_SIZE}px`,
-            'top': `${2 * BLOCK_SIZE}px`,
+            'left': `${PADDING * BLOCK_SIZE}px`,
+            'top': `${PADDING * BLOCK_SIZE}px`,
             'width': `${width * BLOCK_SIZE}px`,
             'height': `${height * BLOCK_SIZE}px`
           }}
@@ -141,6 +145,10 @@ export default class LayoutEditor extends Component {
             }}
           />
         )}
+
+        <div className={localStyles.overlay} />
+
+
       </div>
     );
   }
@@ -162,16 +170,16 @@ export default class LayoutEditor extends Component {
     if (active_table) {
       if (event_type == 'resize') {
         changing_table = {
-          x: active_table.x * BLOCK_SIZE,
-          y: active_table.y * BLOCK_SIZE,
+          x: active_table.x,
+          y: active_table.y,
           width: Math.max(1, (mouse_x / BLOCK_SIZE) - active_table.x),
           height: Math.max(1, (mouse_y / BLOCK_SIZE) - active_table.y),
         };
 
       } else if (event_type == 'drag') {
         changing_table = {
-          x: mouse_x - drag_offset_x,
-          y: mouse_y - drag_offset_y,
+          x: (mouse_x - drag_offset_x) / BLOCK_SIZE,
+          y: (mouse_y - drag_offset_y) / BLOCK_SIZE,
           width: active_table.width,
           height: active_table.height,
         };
@@ -180,8 +188,8 @@ export default class LayoutEditor extends Component {
 
     const gridLines = !!changing_table ?
       this.renderGridLines(
-        changing_table.x,
-        changing_table.y,
+        changing_table.x * BLOCK_SIZE,
+        changing_table.y * BLOCK_SIZE,
         Math.round(changing_table.width),
         Math.round(changing_table.height),
       ) : null;
@@ -195,65 +203,117 @@ export default class LayoutEditor extends Component {
         {gridLines}
 
         {tables.map((table) =>
-          <div
+          <Table
             key={table.id}
+            blockSize={BLOCK_SIZE}
+            x={table.x}
+            y={table.y}
+            width={table.width}
+            height={table.height}
             className={cx(
-              localStyles.wrapper,
               !!active_table && table.id === active_table.id && 'dragstart',
             )}
-            style={{
-              'left': `${BLOCK_SIZE * table.x}px`,
-              'top': `${BLOCK_SIZE * table.y}px`,
-              'width': `${BLOCK_SIZE * table.width}px`,
-              'height': `${BLOCK_SIZE * table.height}px`,
-            }}
-          >
-            <div
-              className={localStyles.table}
-              onMouseDown={(e) => this.startDragging(table, e)}
-              style={{
-                'width': `${BLOCK_SIZE * table.width}px`,
-                'height': `${BLOCK_SIZE * table.height}px`,
-              }}
-            />
-
-            <div
-              onMouseDown={(e) => this.startResizing(table, e)}
-              className={localStyles.resize}
-              style={{
-                'right': `-12px`,
-                'bottom': `-12px`,
-                'width': `28px`,
-                'height': `28px`,
-              }}
-            />
-          </div>
+            startDragging={(e) => this.startDragging(table, e)}
+            startResizing={(e) => this.startResizing(table, e)}
+          />
         )}
 
         {!!changing_table &&
-          <div
-            className={localStyles.wrapper}
-            style={{
-              'left': `${changing_table.x}px`,
-              'top': `${changing_table.y}px`,
-              'width': `${BLOCK_SIZE * changing_table.width}px`,
-              'height': `${BLOCK_SIZE * changing_table.height}px`,
-            }}
-          >
-            <div
-              className={cx(
-                localStyles.table,
-                'active_table',
-              )}
-              style={{
-                'width': `${BLOCK_SIZE * changing_table.width}px`,
-                'height': `${BLOCK_SIZE * changing_table.height}px`,
-              }}
-            >
-            </div>
-          </div>
+          <Table
+            blockSize={BLOCK_SIZE}
+            x={changing_table.x}
+            y={changing_table.y}
+            width={changing_table.width}
+            height={changing_table.height}
+          />
         }
       </div>
     );
   }
+}
+
+
+class Table extends Component {
+  render () {
+    const {
+      blockSize,
+      x, y, width, height,
+      className,
+      startDragging,
+      startResizing,
+    } = this.props;
+
+
+    const chairs = [];
+
+    for (let x_iter = 1; x_iter < width; x_iter++) {
+      chairs.push({
+        x: x_iter - 0.5,
+        y: height
+      },{
+        x: x_iter - 0.5,
+        y: -1
+      });
+    }
+
+    for (let y_iter = 1; y_iter < height; y_iter++) {
+      chairs.push({
+        y: y_iter - 0.5,
+        x: width
+      },{
+        y: y_iter - 0.5,
+        x: -1
+      });
+    }
+
+    console.log(chairs)
+
+    return (
+      <div
+        className={cx(
+          localStyles.wrapper,
+          className,
+        )}
+        style={{
+          'left': `${blockSize * x}px`,
+          'top': `${blockSize * y}px`,
+          'width': `${blockSize * width}px`,
+          'height': `${blockSize * height}px`,
+        }}
+      >
+        <div
+          className={localStyles.table}
+          onMouseDown={startDragging}
+          style={{
+            'width': `${blockSize * width}px`,
+            'height': `${blockSize * height}px`,
+          }}
+        />
+
+        <div
+          onMouseDown={startResizing}
+          className={localStyles.resize}
+          style={{
+            'right': `-12px`,
+            'bottom': `-12px`,
+            'width': `28px`,
+            'height': `28px`,
+          }}
+        />
+
+        {chairs.map((chair) =>
+          <div
+            className={localStyles.chair}
+            style={{
+              left: `${(chair.x + 0.25) * blockSize}px`,
+              top: `${(chair.y + 0.25) * blockSize}px`,
+              width: `${blockSize / 2}px`,
+              height: `${blockSize / 2}px`,
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+
 }
