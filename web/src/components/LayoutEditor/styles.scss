@@ -1,0 +1,65 @@
+$blue: #323D57;
+$pink: #E83189;
+
+:local(.layout) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+:local(.wrapper),
+:local(.table) {
+  position: absolute;
+}
+
+:local(.wrapper) {
+  &.dragstart {
+    opacity: 0.4;
+
+    :local(.table) {
+      border: 1px dashed $pink;
+    }
+  }
+}
+
+:local(.table) {
+  border: 1px solid $blue;
+  background: white;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  cursor: -webkit-grab;
+
+  &.dragging {
+    border-color: $pink;
+    z-index: 3;
+    cursor: -webkit-grabbing;
+  }
+}
+
+:local(.resize) {
+  position: absolute;
+  cursor: nwse-resize;
+  z-index: 4;
+}
+
+:local(.grid) {
+  position: absolute;
+  z-index: 1;
+}
+
+:local(.line) {
+  position: absolute;
+  background: $blue;
+  opacity: 0.15;
+}
+
+:local(.next) {
+  position: absolute;
+  background: $pink;
+  width: 100px;
+  height: 100px;
+  opacity: 0.3;
+}

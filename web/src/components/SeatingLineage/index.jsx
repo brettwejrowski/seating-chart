@@ -21,7 +21,6 @@ export default class SeatingLineage extends Component {
   }
 
   vote (child, milliseconds) {
-    console.log(milliseconds);
     this.setState({
       questions_asked: this.state.questions_asked + 1,
     });
@@ -53,7 +52,7 @@ export default class SeatingLineage extends Component {
           <a
             onClick={() => this.setState({
               favorite: child,
-            )}
+            })}
           >
             Yep
           </a>

@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { get_wedding } from 'lib/api';
 
 import GuestList from 'components/GuestList/index.jsx';
+import LayoutEditor from 'components/LayoutEditor/index.jsx';
 import SeatingLayout from 'components/SeatingLayout/index.jsx';
 import SeatingLineage from 'components/SeatingLineage/index.jsx';
 
@@ -28,7 +29,9 @@ export default class MyWedding extends Component {
       <div>
         <h1>{ wedding.name }</h1>
 
-        <SeatingLineage />
+        <LayoutEditor
+          tables={wedding.tables}
+        />
       </div>
     );
   }
