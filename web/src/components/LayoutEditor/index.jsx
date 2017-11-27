@@ -56,8 +56,8 @@ export default class LayoutEditor extends Component {
         tables: this.state.tables,
       });
     } else if (event_type == 'resize') {
-      active_table.width = x - active_table.x + active_table.width;
-      active_table.height = y - active_table.y + active_table.height;
+      active_table.width = Math.max(1, x - active_table.x + active_table.width);
+      active_table.height = Math.max(1, y - active_table.y + active_table.height);
       this.setState({
         active_table: null,
         tables: this.state.tables,
@@ -127,10 +127,10 @@ export default class LayoutEditor extends Component {
         <div
           className={localStyles.next}
           style={{
-            'left': `${PADDING * BLOCK_SIZE}px`,
-            'top': `${PADDING * BLOCK_SIZE}px`,
-            'width': `${width * BLOCK_SIZE}px`,
-            'height': `${height * BLOCK_SIZE}px`
+            'left': `${(PADDING - 1) * BLOCK_SIZE}px`,
+            'top': `${(PADDING - 1) * BLOCK_SIZE}px`,
+            'width': `${(width + 2) * BLOCK_SIZE}px`,
+            'height': `${(height + 2) * BLOCK_SIZE}px`
           }}
         />
 
@@ -146,7 +146,12 @@ export default class LayoutEditor extends Component {
           />
         )}
 
-        <div className={localStyles.overlay} />
+        <div
+          className={localStyles.overlay}
+          style={{
+            'border-radius': `${6 * BLOCK_SIZE}px`,
+          }}
+        />
 
 
       </div>
@@ -221,6 +226,7 @@ export default class LayoutEditor extends Component {
         {!!changing_table &&
           <Table
             blockSize={BLOCK_SIZE}
+            className={event_type}
             x={changing_table.x}
             y={changing_table.y}
             width={changing_table.width}
@@ -246,27 +252,29 @@ class Table extends Component {
 
     const chairs = [];
 
-    for (let x_iter = 1; x_iter < width; x_iter++) {
+    for (let x_iter = 1; x_iter < width - 0.5; x_iter++) {
       chairs.push({
         x: x_iter - 0.5,
-        y: height
+        y: height,
+        rotate: '180deg',
       },{
         x: x_iter - 0.5,
-        y: -1
+        y: -1,
+        rotate: '0',
       });
     }
 
-    for (let y_iter = 1; y_iter < height; y_iter++) {
+    for (let y_iter = 1; y_iter < height - 0.5; y_iter++) {
       chairs.push({
         y: y_iter - 0.5,
-        x: width
+        x: width,
+        rotate: '90deg',
       },{
         y: y_iter - 0.5,
-        x: -1
+        x: -1,
+        rotate: '-90deg',
       });
     }
-
-    console.log(chairs)
 
     return (
       <div
@@ -309,8 +317,11 @@ class Table extends Component {
               top: `${(chair.y + 0.25) * blockSize}px`,
               width: `${blockSize / 2}px`,
               height: `${blockSize / 2}px`,
+              transform: `rotate(${chair.rotate})`,
             }}
-          />
+          >
+            <div className={localStyles.chairback} />
+          </div>
         )}
       </div>
     );

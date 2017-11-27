@@ -20,7 +20,8 @@ $pink: #E83189;
     z-index: 1;
 
     :local(.table),
-    :local(.chair) {
+    :local(.chair),
+    :local(.chairback) {
       border: 1px dashed $pink;
     }
   }
@@ -34,7 +35,7 @@ $pink: #E83189;
   z-index: 2;
   cursor: -webkit-grab;
 
-  &.dragging {
+  .drag & {
     border-color: $pink;
     z-index: 3;
     cursor: -webkit-grabbing;
@@ -46,9 +47,37 @@ $pink: #E83189;
   border: 1px solid $blue;
   z-index: 2;
   background: white;
+  transition: border-radius 77ms;
+  cursor: pointer;
 
-  .dragging & {
-    border-color: $pink;
+  &::after {
+    content: 'X';
+    color: white;
+  }
+
+  &:hover {
+    background: $pink;
+    border-color: transparent;
+    border-radius: 100%;
+
+    :local(.chairback) {
+      display: none;
+    }
+  }
+
+  :local(.chairback) {
+    position: absolute;
+    height: 15%;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid $blue;
+  }
+
+  .drag & {
+    &, :local(.chairback) {
+      border-color: $pink;
+    }
   }
 }
 
@@ -83,7 +112,7 @@ $pink: #E83189;
 :local(.line) {
   position: absolute;
   background: $blue;
-  opacity: 0.15;
+  opacity: 0.1;
   z-index: 1;
 }
 
@@ -92,5 +121,5 @@ $pink: #E83189;
   background: $pink;
   width: 100px;
   height: 100px;
-  opacity: 0.3;
+  opacity: 0.2;
 }
