@@ -37,6 +37,16 @@ $pink: #E83189;
 :local(.wrapper) {
   transition: transform 133ms, opacity 133ms;
 
+  &:local(.circle) {
+    :local(.table) {
+      border-radius: 100%;
+    }
+  }
+
+  &.add {
+    z-index: 10;
+  }
+
   &.drop-to-delete {
     transform: scale(0.5, 0.5);
     z-index: 4;
@@ -55,6 +65,12 @@ $pink: #E83189;
   }
 }
 
+:local(.count) {
+  position: absolute;
+  color: $pink;
+  font-size: 10px;
+}
+
 :local(.table) {
   border: 1px solid $blue;
   background: white;
@@ -63,7 +79,8 @@ $pink: #E83189;
   z-index: 3;
   cursor: -webkit-grab;
 
-  .drag & {
+  .drag &,
+  .add & {
     border-color: $pink;
     cursor: -webkit-grabbing;
   }
@@ -85,16 +102,6 @@ $pink: #E83189;
     width: 100%;
   }
 
-  &:hover {
-    background: $pink;
-    border-radius: 100%;
-    border-color: transparent;
-
-    :local(.chairback) {
-      display: none;
-    }
-  }
-
   :local(.chairback) {
     position: absolute;
     height: 15%;
@@ -104,7 +111,8 @@ $pink: #E83189;
     border-bottom: 1px solid $blue;
   }
 
-  .drag & {
+  .drag &,
+  .add & {
     &, :local(.chairback) {
       border-color: $pink;
     }
@@ -151,3 +159,68 @@ $pink: #E83189;
   height: 100px;
   opacity: 0.15;
 }
+
+
+
+:local(.palette) {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 100px;
+  height: 100px;
+  z-index: 8;
+
+  :local(.plus),
+  :local(.drawer) {
+    position: absolute;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+  }
+
+  &:hover {
+    right: 0px;
+
+    :local(.drawer) {
+      right: 20px;
+    }
+
+    :local(.plus) {
+      transform: rotate(135deg);
+      right: 40px;
+    }
+  }
+
+  :local(.plus) {
+    right: 20px;
+    bottom: 10px;
+    width: 80px;
+    height: 80px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    font-size: 80px;
+    line-height: 66px;
+    background: $pink;
+    border-radius: 100%;
+    z-index: 8;
+    cursor: pointer;
+    transition: transform 177ms;
+    user-select: none;
+  }
+
+  :local(.drawer) {
+    transition: right 177ms;
+    position: absolute;
+    background: white;
+    width: 430px;
+    height: 100px;
+    right: -455px;
+    z-index: 7;
+
+    & > * {
+      opacity: 0.8;
+    }
+  }
+}
+
+
+
