@@ -486,7 +486,7 @@ class Table extends Component {
 
         <div
           style={{
-            'top': `-${blockSize + 15}px`,
+            'top': `-${blockSize + 20}px`,
             'left': `-${blockSize}px`,
           }}
           className={localStyles.count}>

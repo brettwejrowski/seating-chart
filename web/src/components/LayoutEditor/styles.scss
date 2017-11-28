@@ -68,7 +68,12 @@ $pink: #E83189;
 :local(.count) {
   position: absolute;
   color: $pink;
-  font-size: 10px;
+  font-size: 14px;
+  opacity: 0;
+
+  .resize & {
+    opacity: 1;
+  }
 }
 
 :local(.table) {
