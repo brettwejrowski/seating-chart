@@ -83,12 +83,14 @@ export default class LayoutEditor extends Component {
       let height = Math.max(1, y - active_table.y + active_table.height);
 
       if (active_table.table_type == 'circle') {
-        let diameter = Math.min()
         active_table.number_of_seats = Math.floor(Math.PI * Math.min(width, height));
+        active_table.width = Math.round(Math.min(width, height));
+        active_table.height = active_table.width;
+      } else {
+        active_table.width = Math.round(width)
+        active_table.height = Math.round(height)
       }
 
-      active_table.width = Math.round(Math.min(width, height));
-      active_table.height = active_table.width;
       this.setState({
         active_table: null,
         tables: this.state.tables,
@@ -327,6 +329,7 @@ export default class LayoutEditor extends Component {
             width={table.width}
             height={table.height}
             type={table.table_type}
+            numberOfSeats={table.number_of_seats}
             className={cx(
               !!active_table && table.id === active_table.id && 'dragstart',
             )}
@@ -417,7 +420,8 @@ class Table extends Component {
         });
       }
     } else if (type == 'circle') {
-      let chair_count = numberOfSeats || Math.floor((Math.PI * width));
+      console.log(numberOfSeats)
+      let chair_count = numberOfSeats || Math.floor((Math.PI * Math.min(width, height)));
       let rads = (2 * Math.PI) / chair_count;
 
       for (let chair_iter = 0; chair_iter < chair_count; chair_iter++ ) {
