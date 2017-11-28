@@ -49,12 +49,20 @@ export default class LayoutEditor extends Component {
     const y = Math.round((e.clientY - drag_offset_y) / BLOCK_SIZE);
 
     if (event_type == 'drag') {
-      active_table.x = x;
-      active_table.y = y;
+      let tables = this.state.tables;
+
+      if ((e.clientY) > (window.innerHeight - 50)) {
+        tables.splice(tables.indexOf(active_table), 1);
+      } else {
+        active_table.x = x;
+        active_table.y = y;
+      }
+
       this.setState({
         active_table: null,
-        tables: this.state.tables,
+        tables: tables,
       });
+
     } else if (event_type == 'resize') {
       active_table.width = Math.max(1, x - active_table.x + active_table.width);
       active_table.height = Math.max(1, y - active_table.y + active_table.height);
@@ -120,7 +128,8 @@ export default class LayoutEditor extends Component {
           'left': `${left}px`,
           'top': `${top}px`,
           'width': `${(width + PADDING * 2) * BLOCK_SIZE}px`,
-          'height': `${(height + PADDING * 2) * BLOCK_SIZE}px`
+          'height': `${(height + PADDING * 2) * BLOCK_SIZE}px`,
+          'borderRadius': `${6 * BLOCK_SIZE}px`,
         }}
       >
 
@@ -136,6 +145,7 @@ export default class LayoutEditor extends Component {
 
         {grid_lines.map((line) =>
           <div
+            key={`${line.x}-${line.y}`}
             className={localStyles.line}
             style={{
               left: `${line.x * BLOCK_SIZE}px`,
@@ -149,13 +159,24 @@ export default class LayoutEditor extends Component {
         <div
           className={localStyles.overlay}
           style={{
-            'border-radius': `${6 * BLOCK_SIZE}px`,
+            'borderRadius': `${6 * BLOCK_SIZE}px`,
           }}
         />
-
-
       </div>
     );
+  }
+
+  renderTrash (visible=false) {
+    return (
+      <div
+        className={cx(
+          localStyles.trash,
+          !!visible && 'visible',
+        )}
+      >
+        Drop Here to Delete
+      </div>
+    )
   }
 
   render () {
@@ -187,6 +208,7 @@ export default class LayoutEditor extends Component {
           y: (mouse_y - drag_offset_y) / BLOCK_SIZE,
           width: active_table.width,
           height: active_table.height,
+          drop_to_delete: (window.innerHeight - 50) < mouse_y,
         };
       }
     }
@@ -229,10 +251,13 @@ export default class LayoutEditor extends Component {
             className={event_type}
             x={changing_table.x}
             y={changing_table.y}
+            dropToDelete={changing_table.drop_to_delete}
             width={changing_table.width}
             height={changing_table.height}
           />
         }
+
+        {this.renderTrash(!!changing_table && event_type === 'drag')}
       </div>
     );
   }
@@ -240,13 +265,24 @@ export default class LayoutEditor extends Component {
 
 
 class Table extends Component {
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      deleted_chairs: props.deletedChairs,
+      editing_chairs: [],
+    }
+  }
+
   render () {
     const {
       blockSize,
       x, y, width, height,
+      deletedChairs,
       className,
       startDragging,
       startResizing,
+      dropToDelete,
     } = this.props;
 
 
@@ -257,10 +293,12 @@ class Table extends Component {
         x: x_iter - 0.5,
         y: height,
         rotate: '180deg',
+        id: 'S' + x_iter,
       },{
         x: x_iter - 0.5,
         y: -1,
         rotate: '0',
+        id: 'N' + x_iter,
       });
     }
 
@@ -269,10 +307,12 @@ class Table extends Component {
         y: y_iter - 0.5,
         x: width,
         rotate: '90deg',
+        id: 'E' + y_iter,
       },{
         y: y_iter - 0.5,
         x: -1,
         rotate: '-90deg',
+        id: 'W' + y_iter,
       });
     }
 
@@ -280,6 +320,7 @@ class Table extends Component {
       <div
         className={cx(
           localStyles.wrapper,
+          !!dropToDelete && 'drop-to-delete',
           className,
         )}
         style={{
@@ -311,6 +352,7 @@ class Table extends Component {
 
         {chairs.map((chair) =>
           <div
+            key={chair.id}
             className={localStyles.chair}
             style={{
               left: `${(chair.x + 0.25) * blockSize}px`,
