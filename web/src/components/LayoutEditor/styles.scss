@@ -140,7 +140,7 @@ $pink: #E83189;
 :local(.line) {
   position: absolute;
   background: $blue;
-  opacity: 0.2;
+  opacity: 0.1;
   z-index: 1;
 }
 
@@ -149,5 +149,5 @@ $pink: #E83189;
   background: $pink;
   width: 100px;
   height: 100px;
-  opacity: 0.2;
+  opacity: 0.15;
 }

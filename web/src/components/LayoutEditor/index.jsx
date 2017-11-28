@@ -213,7 +213,7 @@ export default class LayoutEditor extends Component {
       }
     }
 
-    const gridLines = !!changing_table ?
+    const gridLines = !!changing_table && !changing_table.drop_to_delete ?
       this.renderGridLines(
         changing_table.x * BLOCK_SIZE,
         changing_table.y * BLOCK_SIZE,
