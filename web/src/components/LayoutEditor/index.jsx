@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import cx from 'classnames';
 
+import * as api from 'lib/api';
+
 import localStyles from './styles.scss';
 
-const BLOCK_SIZE = 40;
+const BLOCK_SIZE = 30;
 
 export default class LayoutEditor extends Component {
   constructor (props) {
@@ -53,6 +55,7 @@ export default class LayoutEditor extends Component {
 
       if ((e.clientY) > (window.innerHeight - 50)) {
         tables.splice(tables.indexOf(active_table), 1);
+        api.delete_table(active_table.id);
       } else {
         active_table.x = Math.round(x);
         active_table.y = Math.round(y);
@@ -72,11 +75,18 @@ export default class LayoutEditor extends Component {
         tables.push(active_table);
       }
 
+      let payload = Object.assign({}, active_table);
+      payload.number_of_seats = 0;
+      delete payload['id'];
+
+      api.create_table(payload, (data) => {
+        active_table.id = data.id;
+      });
+
       this.setState({
         active_table: null,
         tables: tables,
       });
-
 
     } else if (event_type == 'resize') {
       let width = Math.max(1, x - active_table.x + active_table.width);
@@ -420,7 +430,6 @@ class Table extends Component {
         });
       }
     } else if (type == 'circle') {
-      console.log(numberOfSeats)
       let chair_count = numberOfSeats || Math.floor((Math.PI * Math.min(width, height)));
       let rads = (2 * Math.PI) / chair_count;
 
