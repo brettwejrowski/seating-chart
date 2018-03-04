@@ -61,3 +61,8 @@ export function get_high_scored_index (feedback) {
 
   return i;
 }
+
+export function replaceAtIndex (arr, index, element) {
+  return arr.map((e, i) => i === index ? element : e);
+}
+

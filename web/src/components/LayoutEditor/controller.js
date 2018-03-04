@@ -1,4 +1,6 @@
+var SAT = require('sat');
 import { clone, extend } from 'lodash';
+import { replaceAtIndex } from 'lib/helpers';
 
 
 export function resize (layout, index, coords) {
@@ -49,7 +51,32 @@ export function move (layout, index, coords) {
   return replaceAtIndex(layout, index, table);
 }
 
-function replaceAtIndex (arr, index, element) {
-  return arr.map((e, i) => i === index ? element : e);
-}
+export function isSeatValid (layout, seat, offset) {
+  return layout.filter((table) => {
+    let collided = false,
+        seat_vector = new SAT.Vector(
+          offset.x + seat.x + 0.25,
+          offset.y + seat.y + 0.25,
+        ),
+        seat_polygon = new SAT.Circle(seat_vector, 0.4);
 
+    if (table.table_type == "rect") {
+      var table_vector = new SAT.Vector(table.x, table.y),
+          table_polygon = new SAT.Box(
+            table_vector,
+            table.width,
+            table.height,
+          ).toPolygon();
+
+      collided = SAT.testPolygonCircle(table_polygon, seat_polygon);
+    } else if (table.table_type == "circle") {
+      var radius = table.width / 2,
+          table_vector = new SAT.Vector(table.x + radius, table.y + radius),
+          table_circle = new SAT.Circle(table_vector, radius);
+
+      collided = SAT.testCircleCircle(seat_polygon, table_circle);
+    }
+
+    return collided;
+  }).length > 0;
+}

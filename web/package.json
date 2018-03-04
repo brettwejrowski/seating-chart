@@ -29,6 +29,7 @@
     "react-dnd-html5-backend": "^2.5.4",
     "react-dom": "^15.6.1",
     "sass-loader": "^6.0.6",
+    "sat": "^0.7.0",
     "style-loader": "^0.19.0",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2"

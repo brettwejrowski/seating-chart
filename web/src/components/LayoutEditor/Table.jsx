@@ -24,6 +24,7 @@ export default class Table extends Component {
       startResizing,
       dropToDelete,
       numberOfSeats,
+      seatValidator,
     } = this.props;
 
     let { width, height } = this.props;
@@ -38,13 +39,13 @@ export default class Table extends Component {
     if (type == 'rect') {
       for (let x_iter = 1; x_iter <= width - 0.5; x_iter++) {
         chairs.push({
-          x: x_iter - 0.5,
-          y: height,
+          x: x_iter - 0.25,
+          y: height + 0.25,
           rotate: '180deg',
           id: 'S' + x_iter,
         },{
-          x: x_iter - 0.5,
-          y: -1,
+          x: x_iter - 0.25,
+          y: -0.75,
           rotate: '0',
           id: 'N' + x_iter,
         });
@@ -52,13 +53,13 @@ export default class Table extends Component {
 
       for (let y_iter = 1; y_iter <= height - 0.5; y_iter++) {
         chairs.push({
-          y: y_iter - 0.5,
-          x: width,
+          y: y_iter - 0.25,
+          x: width + 0.25,
           rotate: '90deg',
           id: 'E' + y_iter,
         },{
-          y: y_iter - 0.5,
-          x: -1,
+          y: y_iter - 0.25,
+          x: -0.75,
           rotate: '-90deg',
           id: 'W' + y_iter,
         });
@@ -71,13 +72,17 @@ export default class Table extends Component {
         let rad = chair_iter * rads;
 
         chairs.push({
-          x: (width / 2 + 0.5) * Math.cos(rad) + (width / 2) - 0.5,
-          y: (width / 2 + 0.5) * Math.sin(rad) + (width / 2) - 0.5,
+          x: (width / 2 + 0.5) * Math.cos(rad) + (width / 2) - 0.25,
+          y: (width / 2 + 0.5) * Math.sin(rad) + (width / 2) - 0.25,
           rotate: `${rad + Math.PI / 2}rad`,
           id: `D${rad}`,
         })
       }
+    }
 
+    let validator = () => false;
+    if (typeof seatValidator === 'function') {
+      validator = seatValidator;
     }
 
     return (
@@ -118,10 +123,13 @@ export default class Table extends Component {
         {chairs.map((chair) =>
           <div
             key={chair.id}
-            className={localStyles.chair}
+            className={cx(
+              localStyles.chair,
+              validator(chair, { x, y }) && 'collided',
+            )}
             style={{
-              left: `${(chair.x + 0.25) * blockSize}px`,
-              top: `${(chair.y + 0.25) * blockSize}px`,
+              left: `${(chair.x) * blockSize}px`,
+              top: `${(chair.y) * blockSize}px`,
               width: `${blockSize / 2}px`,
               height: `${blockSize / 2}px`,
               transform: `rotate(${chair.rotate})`,
@@ -137,7 +145,7 @@ export default class Table extends Component {
             'left': `-${blockSize}px`,
           }}
           className={localStyles.count}>
-          {chairs.length} seat{chairs.length !== 1 && 's'}
+            {chairs.length} seat{chairs.length !== 1 && 's'}
         </div>
       </div>
     );

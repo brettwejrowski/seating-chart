@@ -7,10 +7,11 @@ import Palette from './Palette.jsx';
 
 import * as controller from './controller';
 import * as api from 'lib/api';
+import { replaceAtIndex } from 'lib/helpers';
 
 import localStyles from './styles.scss';
 
-const BLOCK_SIZE = 30;
+const BLOCK_SIZE = 40;
 
 export default class LayoutEditor extends Component {
   constructor (props) {
@@ -161,6 +162,20 @@ export default class LayoutEditor extends Component {
 
     const showGridLines = !!changing_table && !changing_table.drop_to_delete;
 
+    const chairValidator = (chair, offset) => {
+      var layout = tables;
+
+      if (active_table) {
+        layout = replaceAtIndex(
+          tables,
+          tables.indexOf(active_table),
+          changing_table,
+        );
+      }
+
+      return controller.isSeatValid(layout, chair, offset);
+    };
+
     return (
       <div
         className={localStyles.layout}
@@ -179,6 +194,7 @@ export default class LayoutEditor extends Component {
 
         {tables.map((table) =>
           <Table
+            seatValidator={chairValidator}
             key={table.id}
             blockSize={BLOCK_SIZE}
             x={table.x}

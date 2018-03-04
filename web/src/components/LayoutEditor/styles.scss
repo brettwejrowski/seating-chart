@@ -1,6 +1,14 @@
 $blue: #323D57;
 $pink: #E83189;
 
+$layer_grid_z_index: 100;
+$layer_surface_z_index: 200;
+$layer_chair_z_index: 300;
+$layer_table_z_index: 400;
+$layer_trash_z_index: 500;
+$layer_palette_z_index: 600;
+$layer_cursor_z_index: 700;
+
 :local(.layout) {
   position: fixed;
   top: 0;
@@ -26,7 +34,7 @@ $pink: #E83189;
   line-height: 50px;
   font-size: 20px;
   color: white;
-  z-index: 2;
+  z-index: $layer_trash_z_index;
 
   &.visible {
     bottom: 0;
@@ -49,13 +57,13 @@ $pink: #E83189;
 
   &.drop-to-delete {
     transform: scale(0.5, 0.5);
-    z-index: 4;
+    z-index: $layer_cursor_z_index;;
     opacity: 0.6;
   }
 
   &.dragstart {
     opacity: 0.4;
-    z-index: 1;
+    z-index: $layer_surface_z_index;
 
     :local(.table),
     :local(.chair),
@@ -81,7 +89,7 @@ $pink: #E83189;
   background: white;
   left: 0;
   top: 0;
-  z-index: 3;
+  z-index: $layer_table_z_index;
   cursor: -webkit-grab;
 
   .drag &,
@@ -94,7 +102,7 @@ $pink: #E83189;
 :local(.chair) {
   position: absolute;
   border: 1px solid $blue;
-  z-index: 2;
+  z-index: $layer_chair_z_index;;
   background: white;
   transition: border-radius 77ms;
   cursor: pointer;
@@ -122,17 +130,21 @@ $pink: #E83189;
       border-color: $pink;
     }
   }
+
+  &.collided {
+    display: none;
+  }
 }
 
 :local(.resize) {
   position: absolute;
   cursor: nwse-resize;
-  z-index: 4;
+  z-index: $layer_cursor_z_index;
 }
 
 :local(.grid) {
   position: absolute;
-  z-index: 1;
+  z-index: $layer_grid_z_index;
   overflow: hidden;
 
   :local(.overlay) {
@@ -146,7 +158,7 @@ $pink: #E83189;
                 inset -20px 20px 70px white,
                 inset -20px -20px 70px white,
                 inset 20px -20px 70px white;
-    z-index: 2;
+    z-index: $layer_grid_z_index + 2;
   }
 }
 
@@ -154,7 +166,7 @@ $pink: #E83189;
   position: absolute;
   background: $blue;
   opacity: 0.1;
-  z-index: 1;
+  z-index: $layer_grid_z_index + 1;
 }
 
 :local(.next) {
@@ -173,7 +185,7 @@ $pink: #E83189;
   right: 20px;
   width: 100px;
   height: 100px;
-  z-index: 8;
+  z-index: $layer_palette_z_index;
 
   :local(.plus),
   :local(.drawer) {
@@ -206,7 +218,7 @@ $pink: #E83189;
     line-height: 66px;
     background: $pink;
     border-radius: 100%;
-    z-index: 8;
+    z-index: $layer_palette_z_index + 2;
     cursor: pointer;
     transition: transform 177ms;
     user-select: none;
@@ -219,7 +231,7 @@ $pink: #E83189;
     width: 430px;
     height: 100px;
     right: -455px;
-    z-index: 7;
+    z-index: $layer_palette_z_index + 1;
 
     & > * {
       opacity: 0.8;
