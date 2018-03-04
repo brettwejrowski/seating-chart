@@ -37,7 +37,7 @@ export default class Table extends Component {
     const chairs = [];
 
     if (type == 'rect') {
-      for (let x_iter = 1; x_iter <= width - 0.5; x_iter++) {
+      for (let x_iter = 0.5; x_iter <= width; x_iter++) {
         chairs.push({
           x: x_iter - 0.25,
           y: height + 0.25,
@@ -51,7 +51,7 @@ export default class Table extends Component {
         });
       }
 
-      for (let y_iter = 1; y_iter <= height - 0.5; y_iter++) {
+      for (let y_iter = 0.5; y_iter <= height; y_iter++) {
         chairs.push({
           y: y_iter - 0.25,
           x: width + 0.25,
@@ -100,6 +100,15 @@ export default class Table extends Component {
           'height': `${blockSize * height}px`,
         }}
       >
+        <div
+          className={localStyles.tableEdge}
+          onMouseDown={startDragging}
+          style={{
+            'width': `${blockSize * width + 2}px`,
+            'height': `${blockSize * height + 2}px`,
+          }}
+        />
+
         <div
           className={localStyles.table}
           onMouseDown={startDragging}

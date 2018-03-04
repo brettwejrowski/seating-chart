@@ -18,7 +18,8 @@ $layer_cursor_z_index: 700;
 }
 
 :local(.wrapper),
-:local(.table) {
+:local(.table),
+:local(.tableEdge) {
   position: absolute;
 }
 
@@ -46,7 +47,7 @@ $layer_cursor_z_index: 700;
   transition: transform 133ms, opacity 133ms;
 
   &:local(.circle) {
-    :local(.table) {
+    :local(.table), :local(.tableEdge) {
       border-radius: 100%;
     }
   }
@@ -65,7 +66,7 @@ $layer_cursor_z_index: 700;
     opacity: 0.4;
     z-index: $layer_surface_z_index;
 
-    :local(.table),
+    :local(.tableEdge),
     :local(.chair),
     :local(.chairback) {
       border: 1px dashed $pink;
@@ -85,24 +86,40 @@ $layer_cursor_z_index: 700;
 }
 
 :local(.table) {
-  border: 1px solid $blue;
+  border: none;
   background: white;
   left: 0;
   top: 0;
+  z-index: $layer_table_z_index + 1;
+  cursor: -webkit-grab;
+
+  .drag &,
+  .add &,
+  &:hover {
+    border: 1px dashed $pink;
+    cursor: -webkit-grabbing;
+    z-index: $layer_table_z_index + 2;
+  }
+}
+
+:local(.tableEdge) {
+  border: 1px solid $blue;
+  background: transparent;
+  left: -1px;
+  top: -1px;
   z-index: $layer_table_z_index;
   cursor: -webkit-grab;
 
   .drag &,
   .add & {
     border-color: $pink;
-    cursor: -webkit-grabbing;
   }
 }
 
 :local(.chair) {
   position: absolute;
   border: 1px solid $blue;
-  z-index: $layer_chair_z_index;;
+  z-index: $layer_chair_z_index + 1;
   background: white;
   transition: border-radius 77ms;
   cursor: pointer;
