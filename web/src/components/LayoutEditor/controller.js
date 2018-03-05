@@ -11,7 +11,7 @@ export function resize (layout, index, coords) {
       height = Math.max(1, y - table.y + table.height);
 
   if (table.table_type == 'circle') {
-    table.number_of_seats = Math.floor(Math.PI * Math.min(width, height));
+    table.number_of_seats = Math.floor(4 * Math.min(width, height));
     table.width = Math.round(Math.min(width, height));
     table.height = table.width;
   } else {
@@ -80,3 +80,18 @@ export function isSeatValid (layout, seat, offset) {
     return collided;
   }).length > 0;
 }
+
+const TABLE_TYPES = {
+  RECT: 'rect',
+  CIRCLE: 'circle',
+};
+
+export function table (opt_options={}) {
+  let options = extend({
+    width: 1,
+    height: 1,
+    type: TABLE_TYPES.RECT,
+
+  }, opt_options);
+}
+

@@ -53,7 +53,7 @@ $layer_cursor_z_index: 700;
   }
 
   &.add {
-    z-index: 10;
+    z-index: $layer_cursor_z_index;
   }
 
   &.drop-to-delete {
@@ -86,7 +86,7 @@ $layer_cursor_z_index: 700;
 }
 
 :local(.table) {
-  border: none;
+  border: 1px solid transparent;
   background: white;
   left: 0;
   top: 0;
@@ -94,10 +94,13 @@ $layer_cursor_z_index: 700;
   cursor: -webkit-grab;
 
   .drag &,
-  .add &,
+  .add & {
+    cursor: -webkit-grabbing;
+    border: 1px dashed $pink;
+  }
+
   &:hover {
     border: 1px dashed $pink;
-    cursor: -webkit-grabbing;
     z-index: $layer_table_z_index + 2;
   }
 }

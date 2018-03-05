@@ -208,6 +208,7 @@ export default class LayoutEditor extends Component {
             )}
             startDragging={(e) => this.startDragging(table, e)}
             startResizing={(e) => this.startResizing(table, e)}
+            startAdding={(e) => this.startAdding(table, e)}
           />
         )}
 

@@ -13,6 +13,16 @@ export default class Table extends Component {
     }
   }
 
+  handleDragClick (e) {
+    const { startDragging, startAdding } = this.props;
+
+    if (e.altKey) {
+      startAdding(e);
+    } else {
+      startDragging(e);
+    }
+  }
+
   render () {
     const {
       type,
@@ -65,10 +75,10 @@ export default class Table extends Component {
         });
       }
     } else if (type == 'circle') {
-      let chair_count = numberOfSeats || Math.floor((Math.PI * Math.min(width, height)));
+      let chair_count = numberOfSeats || Math.floor(4 * Math.min(width, height));
       let rads = (2 * Math.PI) / chair_count;
 
-      for (let chair_iter = 0; chair_iter < chair_count; chair_iter++ ) {
+      for (let chair_iter = 0; chair_iter <= chair_count; chair_iter++ ) {
         let rad = chair_iter * rads;
 
         chairs.push({
@@ -102,7 +112,6 @@ export default class Table extends Component {
       >
         <div
           className={localStyles.tableEdge}
-          onMouseDown={startDragging}
           style={{
             'width': `${blockSize * width + 2}px`,
             'height': `${blockSize * height + 2}px`,
@@ -111,7 +120,7 @@ export default class Table extends Component {
 
         <div
           className={localStyles.table}
-          onMouseDown={startDragging}
+          onMouseDown={this.handleDragClick.bind(this)}
           style={{
             'width': `${blockSize * width}px`,
             'height': `${blockSize * height}px`,
